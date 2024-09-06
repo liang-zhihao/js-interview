@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Throttle Example</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+    </style>
+    <script>
+      // Throttle function to limit how often a function can fire
+      function throttle(func, wait) {
+        let lastTime = 0;
+        return function (...args) {
+          const now = Date.now();
+          if (now - lastTime >= wait) {
+            lastTime = now;
+            func.apply(this, args);
+          }
+        };
+      }
+
+      // Function to be throttled
+      function handleResize() {
+        const output = document.getElementById("output");
+        output.textContent = `Window resized at: ${new Date().toLocaleTimeString()}`;
+      }
+
+      // Creating a throttled version of handleResize
+      const throttledHandleResize = throttle(handleResize, 1000);
+
+      // Function to set up the event listener
+      function setup() {
+        window.addEventListener("resize", throttledHandleResize);
+      }
+    </script>
+  </head>
+  <body onload="setup()">
+    <h1>Throttle Function Example</h1>
+    <p>
+      Resize the browser window and watch how the resize events are throttled.
+    </p>
+    <p id="output">No resize detected yet.</p>
+  </body>
+</html>

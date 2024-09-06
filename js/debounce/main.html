@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Debounce Example</title>
+    <script>
+      // Debounce function to limit how often a function can fire
+      function debounce(func, wait) {
+        let timer = null;
+        return function (...args) {
+          const context = this;
+          clearTimeout(timer);
+          timer = setTimeout(() => {
+            func.apply(context, args);
+          }, wait);
+        };
+      }
+
+      // Function to be debounced
+      function handleInput(input) {
+        console.log("Processing input:", input);
+        // Update display with processed input
+        document.getElementById(
+          "output"
+        ).textContent = `Processed Input: ${input}`;
+      }
+
+      // Creating a debounced version of handleInput
+      const debouncedHandleInput = debounce(handleInput, 300);
+
+      // Function to set up the event listener
+      function setup() {
+        document
+          .getElementById("inputField")
+          .addEventListener("input", (event) => {
+            debouncedHandleInput(event.target.value);
+          });
+      }
+    </script>
+  </head>
+  <body onload="setup()">
+    <h1>Debounce Function Example</h1>
+    <p>Type something in the textbox below:</p>
+    <input type="text" id="inputField" placeholder="Start typing..." />
+    <p id="output">Processed Input:</p>
+  </body>
+</html>

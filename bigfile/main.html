@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="file" id="input" />
+    <button id="upload">上传</button>
+    <!-- 上传进度 -->
+    <div style="width: 300px" id="progress"></div>
+  </body>
+  <script>
+    let input = document.getElementById("input");
+    let upload = document.getElementById("upload");
+    let files = {};
+    let chuckList = [];
+    input.addEventListener("change", (e) => {
+      files = e.target.files[0];
+      createChunk(files);
+    });
+    function createChunk(file, size = 1 * 1024) {
+      const chunckList = [];
+      let cur = 0;
+      while (cur < file.size) {
+        chuckList.push({
+          file: file.slice(cur, cur + size),
+        });
+        cur += size;
+      }
+      console.log(chuckList);
+    }
+    async function upload(list) {
+      const requestList = list.map(({ file, fileName, index, chunkName }) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("index", index);
+        formData.append("chunkName", chunkName);
+        formData.append("fileName", fileName);
+      });
+    }
+  </script>
+</html>
